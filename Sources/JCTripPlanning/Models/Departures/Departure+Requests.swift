@@ -29,7 +29,7 @@ extension Departure {
             
             public struct Website {
                 
-                func queryItems(for stopID: Int, mode: ModeOfTravel? = nil) -> [(String, String)] {
+                public static func queryItems(for stopID: Int, mode: ModeOfTravel? = nil) -> [(String, String)] {
                     
                     let dateValue = DateHelper.queryStringDateFormatter.string(from: Date())
                     let timeValue = DateHelper.queryStringTimeFormatter.string(from: Date())
@@ -56,7 +56,7 @@ extension Departure {
                     switch stopID {
                     case 1:
                         requestStopID = 200020
-                        var extraQueryItems: [(String, String)] = [
+                        let extraQueryItems: [(String, String)] = [
                             ("excludedMeans", "checkbox"),
                             ("exclMOT_1", "1"), // Exclude trains
                             ("exclMOT_4", "1"), // Exclude light rail
@@ -67,7 +67,7 @@ extension Departure {
                         queryItems.append(contentsOf: extraQueryItems)
                     case 2:
                         requestStopID = 2000441
-                        var extraQueryItems: [(String, String)] = [
+                        let extraQueryItems: [(String, String)] = [
                             ("excludedMeans", "checkbox"),
                             ("exclMOT_1", "1"), // Exclude trains
                             ("exclMOT_4", "1"), // Exclude light rail
@@ -78,7 +78,7 @@ extension Departure {
                         queryItems.append(contentsOf: extraQueryItems)
                     case 3:
                         requestStopID = 10102027
-                        var extraQueryItems: [(String, String)] = [
+                        let extraQueryItems: [(String, String)] = [
                             ("excludedMeans", "checkbox"),
                             ("exclMOT_1", "1"), // Exclude trains
                             ("exclMOT_4", "1"), // Exclude light rail
@@ -89,7 +89,7 @@ extension Departure {
                         queryItems.append(contentsOf: extraQueryItems)
                     case 88888888:
                         requestStopID = 2000447
-                        var extraQueryItems: [(String, String)] = [
+                        let extraQueryItems: [(String, String)] = [
                             ("excludedMeans", "checkbox"),
                             ("exclMOT_1", "1"), // Exclude trains
                             ("exclMOT_5", "1"), // Exclude buses
@@ -100,7 +100,7 @@ extension Departure {
                         queryItems.append(contentsOf: extraQueryItems)
                     case 200020:
                         if case .lightRail = mode {
-                            var extraQueryItems: [(String, String)] = [
+                            let extraQueryItems: [(String, String)] = [
                                     ("excludedMeans", "checkbox"),
                                     ("exclMOT_1", "1"), // Exclude trains
                                     ("exclMOT_5", "1"), // Exclude buses
