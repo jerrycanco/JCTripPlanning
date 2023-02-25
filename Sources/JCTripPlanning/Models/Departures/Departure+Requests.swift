@@ -29,6 +29,94 @@ extension Departure {
             
             public struct Website {
                 
+                func queryItems(for stopID: Int, mode: ModeOfTravel? = nil) -> [(String, String)] {
+                    
+                    let dateValue = DateHelper.queryStringDateFormatter.string(from: Date())
+                    let timeValue = DateHelper.queryStringTimeFormatter.string(from: Date())
+                    
+                    var queryItems: [(String, String)] = [
+                        ("depType", "stopEvents"),
+                        ("type", "stop"),
+                        ("accessible", "false"),
+                        ("date", dateValue),
+                        ("time", timeValue),
+                        ("depArrMacro", "dep"),
+                        ("debug", "false"),
+                        ("depType", "stopEvents")
+                    ]
+                    
+                    /// Circular Quay, Barangaroo and Manly are treated differently
+                    /// as they have multiple 'parent' stations and offer departures
+                    /// from multiple modes.
+                    ///
+                    /// Central Chalmers St Light Rail is given stopID
+                    /// 88888888 by the API as it has two child stops that
+                    /// depart for Randwick/Kingsford.
+                    var requestStopID = stopID
+                    switch stopID {
+                    case 1:
+                        requestStopID = 200020
+                        var extraQueryItems: [(String, String)] = [
+                            ("excludedMeans", "checkbox"),
+                            ("exclMOT_1", "1"), // Exclude trains
+                            ("exclMOT_4", "1"), // Exclude light rail
+                            ("exclMOT_5", "1"), // Exclude buses
+                            ("exclMOT_7", "1"), // Exclude coaches
+                            ("exclMOT_11", "1") // Exclude school buses
+                        ]
+                        queryItems.append(contentsOf: extraQueryItems)
+                    case 2:
+                        requestStopID = 2000441
+                        var extraQueryItems: [(String, String)] = [
+                            ("excludedMeans", "checkbox"),
+                            ("exclMOT_1", "1"), // Exclude trains
+                            ("exclMOT_4", "1"), // Exclude light rail
+                            ("exclMOT_5", "1"), // Exclude buses
+                            ("exclMOT_7", "1"), // Exclude coaches
+                            ("exclMOT_11", "1") // Exclude school buses
+                        ]
+                        queryItems.append(contentsOf: extraQueryItems)
+                    case 3:
+                        requestStopID = 10102027
+                        var extraQueryItems: [(String, String)] = [
+                            ("excludedMeans", "checkbox"),
+                            ("exclMOT_1", "1"), // Exclude trains
+                            ("exclMOT_4", "1"), // Exclude light rail
+                            ("exclMOT_5", "1"), // Exclude buses
+                            ("exclMOT_7", "1"), // Exclude coaches
+                            ("exclMOT_11", "1") // Exclude school buses
+                        ]
+                        queryItems.append(contentsOf: extraQueryItems)
+                    case 88888888:
+                        requestStopID = 2000447
+                        var extraQueryItems: [(String, String)] = [
+                            ("excludedMeans", "checkbox"),
+                            ("exclMOT_1", "1"), // Exclude trains
+                            ("exclMOT_5", "1"), // Exclude buses
+                            ("exclMOT_7", "1"), // Exclude coaches
+                            ("exclMOT_9", "1"), // Exclude ferries
+                            ("exclMOT_11", "1") // Exclude school buses
+                        ]
+                        queryItems.append(contentsOf: extraQueryItems)
+                    case 200020:
+                        if case .lightRail = mode {
+                            var extraQueryItems: [(String, String)] = [
+                                    ("excludedMeans", "checkbox"),
+                                    ("exclMOT_1", "1"), // Exclude trains
+                                    ("exclMOT_5", "1"), // Exclude buses
+                                    ("exclMOT_7", "1"), // Exclude coaches
+                                    ("exclMOT_9", "1"), // Exclude ferries
+                                    ("exclMOT_11", "1") // Exclude school buses
+                            ]
+                            queryItems.append(contentsOf: extraQueryItems)
+                        }
+                    default: break
+                    }
+                    
+                    queryItems.append(("name", "\(requestStopID)"))
+                    return queryItems
+                }
+                
                 public struct QueryItems: Codable {
                     public let name: String
                     public let depType: String
