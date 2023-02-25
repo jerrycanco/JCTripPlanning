@@ -9,39 +9,39 @@ import Foundation
 
 extension Departure {
     
-    struct Requests {
+    public struct Requests {
         
         // MARK: Request Object from Client
         
-        struct Client: Codable {
-            let stopID: Int
-            let modeOfTravel: ModeOfTravel?
+        public struct Client: Codable {
+            public let stopID: Int
+            public let modeOfTravel: ModeOfTravel?
         }
         
         // MARK: Query Items for TFNSW
         
-        struct TFNSW {
+        public struct TFNSW {
             
-            struct Website {
+            public struct Website {
                 
-                struct QueryItems: Codable {
-                    let name: String
-                    let depType: String
-                    let type: String
-                    let accessible: String
-                    let date: String
-                    let time: String
-                    let depArrMacro: String
-                    let debug: String
-                    let excludedMeans: String?
-                    let exclMOT_1: String?
-                    let exclMOT_4: String?
-                    let exclMOT_5: String?
-                    let exclMOT_7: String?
-                    let exclMOT_9: String?
-                    let exclMOT_11: String?
+                public struct QueryItems: Codable {
+                    public let name: String
+                    public let depType: String
+                    public let type: String
+                    public let accessible: String
+                    public let date: String
+                    public let time: String
+                    public let depArrMacro: String
+                    public let debug: String
+                    public let excludedMeans: String?
+                    public let exclMOT_1: String?
+                    public let exclMOT_4: String?
+                    public let exclMOT_5: String?
+                    public let exclMOT_7: String?
+                    public let exclMOT_9: String?
+                    public let exclMOT_11: String?
                     
-                    init(stopID: Int, mode: ModeOfTravel?) {
+                    public init(stopID: Int, mode: ModeOfTravel?) {
                         let dateValue = DateHelper.queryStringDateFormatter.string(from: Date())
                         let timeValue = DateHelper.queryStringTimeFormatter.string(from: Date())
                         
@@ -131,21 +131,21 @@ extension Departure {
                 }
             }
             
-            struct OpenDataAPI {
+            public struct OpenDataAPI {
                 
-                struct QueryItems: Codable {
-                    let outputFormat: String
-                    let coordOutputFormat: String
-                    let mode: String
-                    let type_dm: String
-                    let name_dm: String
-                    let itdDate: String
-                    let itdTime: String
-                    let departureMonitorMacro: Bool
-                    let TfNSWDM: Bool
-                    let version: String
+                public struct QueryItems: Codable {
+                    public let outputFormat: String
+                    public let coordOutputFormat: String
+                    public let mode: String
+                    public let type_dm: String
+                    public let name_dm: String
+                    public let itdDate: String
+                    public let itdTime: String
+                    public let departureMonitorMacro: Bool
+                    public let TfNSWDM: Bool
+                    public let version: String
                     
-                    init(stopID: Int) {
+                    public init(stopID: Int) {
                         let dateValue = DateHelper.queryStringDateFormatter.string(from: Date())
                         let timeValue = DateHelper.queryStringTimeFormatter.string(from: Date())
                         

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ModeOfTravel: String, Codable, CaseIterable {
+public enum ModeOfTravel: String, Codable, CaseIterable {
     case train = "train"
     case bus = "bus"
     case lightRail = "lightRail"

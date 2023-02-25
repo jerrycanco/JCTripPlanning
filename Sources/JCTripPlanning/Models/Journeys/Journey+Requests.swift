@@ -9,36 +9,36 @@ import Foundation
 
 extension Journey {
     
-    struct Requests {
+    public struct Requests {
         
-        struct Client: Codable {
-            let origin: String?
-            let fromLat: Double?
-            let fromLng: Double?
-            let destination: String
-            let metric: DepartureMetric
-            let date: Date?
-            let accessible: Bool
-            let includeSchoolBuses: Bool
+        public struct Client: Codable {
+            public let origin: String?
+            public let fromLat: Double?
+            public let fromLng: Double?
+            public let destination: String
+            public let metric: DepartureMetric
+            public let date: Date?
+            public let accessible: Bool
+            public let includeSchoolBuses: Bool
         }
         
-        struct TFNSW: Codable {
+        public struct TFNSW: Codable {
             
-            struct Website {
-                let from: String?
-                let fromLat: Double
-                let fromLng: Double
-                let to: String
-                let toLat: Double
-                let toLng: Double
-                let leaving: Bool
-                let excludedModes: [Int]
-                let source: String
-                let filters: Filters
-                let preferences: Preferences
-                let dateTime: String?
+            public struct Website {
+                public let from: String?
+                public let fromLat: Double
+                public let fromLng: Double
+                public let to: String
+                public let toLat: Double
+                public let toLng: Double
+                public let leaving: Bool
+                public let excludedModes: [Int]
+                public let source: String
+                public let filters: Filters
+                public let preferences: Preferences
+                public let dateTime: String?
                 
-                init(originStopID: String, destinationStopID: String, metric: DepartureMetric = .immediately, date: Date?, accessible: Bool) {
+                public init(originStopID: String, destinationStopID: String, metric: DepartureMetric = .immediately, date: Date?, accessible: Bool) {
                     self.from = originStopID
                     self.to = destinationStopID
                     self.fromLat = 0
@@ -61,7 +61,7 @@ extension Journey {
                     }
                 }
                 
-                init(fromLat: Double, fromLng: Double, destinationStopID: String, metric: DepartureMetric = .immediately, date: Date?, accessible: Bool) {
+                public init(fromLat: Double, fromLng: Double, destinationStopID: String, metric: DepartureMetric = .immediately, date: Date?, accessible: Bool) {
                     self.from = nil
                     self.to = destinationStopID
                     self.fromLat = fromLat
@@ -85,24 +85,24 @@ extension Journey {
                 }
             }
             
-            struct QueryItems: Codable {
-                let outputFormat: String
-                let coordOutputFormat: String
-                let depArrMacro: String
-                let itdDate: String
-                let itdTime: String
-                let type_origin: String
-                let name_origin: String
-                let type_destination: String
-                let name_destination: String
-                let calcNumberOfTrips: Int
-                let wheelchair: String?
-                let TfNSWTR: Bool
-                let version: String
-                let itOptionsActive: Int
-                let cycleSpeed: Int
+            public struct QueryItems: Codable {
+                public let outputFormat: String
+                public let coordOutputFormat: String
+                public let depArrMacro: String
+                public let itdDate: String
+                public let itdTime: String
+                public let type_origin: String
+                public let name_origin: String
+                public let type_destination: String
+                public let name_destination: String
+                public let calcNumberOfTrips: Int
+                public let wheelchair: String?
+                public let TfNSWTR: Bool
+                public let version: String
+                public let itOptionsActive: Int
+                public let cycleSpeed: Int
                 
-                init?(journeysRequest: Journey.Requests.Client) {
+                public init?(journeysRequest: Journey.Requests.Client) {
                     let dateValue = DateHelper.queryStringDateFormatter.string(from: Date())
                     let timeValue = DateHelper.queryStringTimeFormatter.string(from: Date())
                     
@@ -137,26 +137,26 @@ extension Journey {
                 }
             }
             
-            struct Filters: Codable {
-                let onlyAccessible, onlyOpal: Bool
-                let includedJourneys: [String]
+            public struct Filters: Codable {
+                public let onlyAccessible, onlyOpal: Bool
+                public let includedJourneys: [String]
                 
-                init(accessible: Bool) {
+                public init(accessible: Bool) {
                     self.onlyAccessible = accessible
                     self.onlyOpal = false
                     self.includedJourneys = ["public-transport", "walk"]
                 }
             }
 
-            struct Preferences: Codable {
-                let gettingFromMode: Int
-                let gettingToMode: Int
-                let gettingFromValue: Int
-                let gettingToValue: Int
-                let tripPreference: Int
-                let walkSpeed: Int
+            public struct Preferences: Codable {
+                public let gettingFromMode: Int
+                public let gettingToMode: Int
+                public let gettingFromValue: Int
+                public let gettingToValue: Int
+                public let tripPreference: Int
+                public let walkSpeed: Int
                 
-                init() {
+                public init() {
                     self.gettingFromMode = 100
                     self.gettingToMode = 100
                     self.gettingFromValue = 20

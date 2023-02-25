@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum DepartureMetric: String, Codable {
+public enum DepartureMetric: String, Codable {
     case immediately
     case departingAfter
     case arrivingBefore

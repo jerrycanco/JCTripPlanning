@@ -7,20 +7,20 @@
 
 import Foundation
 
-enum RealtimeStatus: String, Codable {
+public enum RealtimeStatus: String, Codable {
     case onTime
     case delayed
     case noRealtimeData
 }
 
-struct Departure: Codable {
-    let departureStopID: Int
-    let departureStopName: String
-    let arrivalDetail: String
-    var departureTime: Int
-    let departureDate: Date
-    let routeID: String
-    let realtimeMessage: String
-    let realtimeStatus: RealtimeStatus
+public struct Departure: Codable {
+    public let departureStopID: Int
+    public let departureStopName: String
+    public let arrivalDetail: String
+    public var departureTime: Int
+    public let departureDate: Date
+    public let routeID: String
+    public let realtimeMessage: String
+    public let realtimeStatus: RealtimeStatus
 }
 

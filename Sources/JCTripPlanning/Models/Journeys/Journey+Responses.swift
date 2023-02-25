@@ -9,32 +9,32 @@ import Foundation
 
 extension Journey {
     
-    struct Responses {
+    public struct Responses {
         
-        struct TFNSW {
+        public struct TFNSW {
             
-            struct Website: Codable {
-                let journeys: [TFNSWJourney]?
-                let systemMessages: [TFNSWJourneySystemMessage]?
-                let serverTime: String?
+            public struct Website: Codable {
+                public let journeys: [TFNSWJourney]?
+                public let systemMessages: [TFNSWJourneySystemMessage]?
+                public let serverTime: String?
             }
             
-            struct TFNSWJourneySystemMessage: Codable {
-                let category: String?
-                let type: String?
-                let text: String?
+            public struct TFNSWJourneySystemMessage: Codable {
+                public let category: String?
+                public let type: String?
+                public let text: String?
             }
 
-            struct TFNSWJourney: Codable  {
-                let type: String?
-                let fares: [TFNSWJourneyFare]?
-                let legs: [TFNSWJourneyLeg]
-                let isBookingRequired, isFree, isOpalEnabled, isOpalPayEnabled: Bool?
-                let hasAlertMessages, isAccessible: Bool?
-                let isRealTime: Bool
-                let duration: Int
+            public struct TFNSWJourney: Codable  {
+                public let type: String?
+                public let fares: [TFNSWJourneyFare]?
+                public let legs: [TFNSWJourneyLeg]
+                public let isBookingRequired, isFree, isOpalEnabled, isOpalPayEnabled: Bool?
+                public let hasAlertMessages, isAccessible: Bool?
+                public let isRealTime: Bool
+                public let duration: Int
                 
-                init?(type: String?, fares: [TFNSWJourneyFare]?, legs: [TFNSWJourneyLeg], isRealTime: Bool?, duration: Int) {
+                public init?(type: String?, fares: [TFNSWJourneyFare]?, legs: [TFNSWJourneyLeg], isRealTime: Bool?, duration: Int) {
                     guard
                         type == "publicTransport",
                         let isRealTime = isRealTime,
@@ -60,113 +60,113 @@ extension Journey {
                 }
             }
 
-            struct TFNSWJourneyFare: Codable  {
-                let type: Int?
-                let amount: Double?
-                let stationAccessFee: Double?
-                let fareAvailable, farePartiallyEnabled, opalAvailable: Bool?
+            public struct TFNSWJourneyFare: Codable  {
+                public let type: Int?
+                public let amount: Double?
+                public let stationAccessFee: Double?
+                public let fareAvailable, farePartiallyEnabled, opalAvailable: Bool?
             }
 
-            struct TFNSWJourneyLeg: Codable  {
-                let coordinates: [[Double]]?
-                let isPublicTransport, isBookingRequired: Bool?
-                let origin, destination: TFNSWJourneyStopEvent
-                let departingTime: String
-                let departingTimeUnadjusted: String?
-                let departingTimePlanned: String
-                let departingTimePlannedUnadjusted: String?
-                let arrivalTime: String
-                let arrivalTimeUnadjusted: String?
-                let arrivalTimePlanned: String?
-                let arrivalTimePlannedUnadjusted: String?
-                let alerts: [TFNSWJourneyAlert]?
-                let hasAlertMessages, isHighFrequency: Bool?
-                let isRealTime: Bool?
-                let duration: Int?
-                let transportation: TFNSWJourneyTransportation
-                let arrivalStatus: String?
-                let isFootpath, isBikeRide, isTaxiDrive: Bool?
-                let fares: [TFNSWJourneyFare]?
-                let isFreeService, isOpalAvailable, isOpalPay, isFareAvailable: Bool?
-                let stopSequence: [TFNSWJourneyStopEvent]?
-                let isAccessible: Bool?
-                let distance: Int?
-                let pathDescriptions: [PathDescription]?
-                let standby: Bool?
+            public struct TFNSWJourneyLeg: Codable  {
+                public let coordinates: [[Double]]?
+                public let isPublicTransport, isBookingRequired: Bool?
+                public let origin, destination: TFNSWJourneyStopEvent
+                public let departingTime: String
+                public let departingTimeUnadjusted: String?
+                public let departingTimePlanned: String
+                public let departingTimePlannedUnadjusted: String?
+                public let arrivalTime: String
+                public let arrivalTimeUnadjusted: String?
+                public let arrivalTimePlanned: String?
+                public let arrivalTimePlannedUnadjusted: String?
+                public let alerts: [TFNSWJourneyAlert]?
+                public let hasAlertMessages, isHighFrequency: Bool?
+                public let isRealTime: Bool?
+                public let duration: Int?
+                public let transportation: TFNSWJourneyTransportation
+                public let arrivalStatus: String?
+                public let isFootpath, isBikeRide, isTaxiDrive: Bool?
+                public let fares: [TFNSWJourneyFare]?
+                public let isFreeService, isOpalAvailable, isOpalPay, isFareAvailable: Bool?
+                public let stopSequence: [TFNSWJourneyStopEvent]?
+                public let isAccessible: Bool?
+                public let distance: Int?
+                public let pathDescriptions: [PathDescription]?
+                public let standby: Bool?
             }
 
-            struct TFNSWJourneyAlert: Codable {
-                let subtitle: String?
-                let isVeryLowPriority: Bool?
-                let isHighPriority: Bool?
-                let url: String?
-                let urlText: String?
-                let creationDate: String?
-                let lastUpdated: String?
+            public struct TFNSWJourneyAlert: Codable {
+                public let subtitle: String?
+                public let isVeryLowPriority: Bool?
+                public let isHighPriority: Bool?
+                public let url: String?
+                public let urlText: String?
+                public let creationDate: String?
+                public let lastUpdated: String?
             }
 
-            struct TFNSWJourneyStopEvent: Codable  {
-                let coordinates: [Double]?
-                let id, name, disassembledName: String?
-                let type: String?
-                let arrivalTimeEstimated, arrivalTimePlanned: String?
-                let isAccessible: Bool?
-                let suburb, parentID: String?
-                let departureTimeEstimated, departureTimePlanned: String?
+            public struct TFNSWJourneyStopEvent: Codable  {
+                public let coordinates: [Double]?
+                public let id, name, disassembledName: String?
+                public let type: String?
+                public let arrivalTimeEstimated, arrivalTimePlanned: String?
+                public let isAccessible: Bool?
+                public let suburb, parentID: String?
+                public let departureTimeEstimated, departureTimePlanned: String?
             }
 
-            struct PathDescription: Codable  {
-                let manoeuvre: String?
-                let turnDirection: String?
-                let name: String?
-                let duration: Double?
-                let distance: Int?
-                let cumDistance, cumDuration: Double?
-                let properties: TFNSWJourneyProperties?
-                let skyDirection: String?
+            public struct PathDescription: Codable  {
+                public let manoeuvre: String?
+                public let turnDirection: String?
+                public let name: String?
+                public let duration: Double?
+                public let distance: Int?
+                public let cumDistance, cumDuration: Double?
+                public let properties: TFNSWJourneyProperties?
+                public let skyDirection: String?
             }
 
-            struct TFNSWJourneyProperties: Codable  {}
+            public struct TFNSWJourneyProperties: Codable  {}
 
-            struct TFNSWJourneyTransportation: Codable  {
-                let id: String?
-                let mode: Int
-                let name: String
-                let productID: Int?
-                let routeNumber, serviceDirection: String?
-                let type: String?
-                let colour: TFNSWJourneyColour?
-                let networkID: Int?
-                let destination: TransportationDestination?
-                let occupancy: String?
-                let transportationOperator: TFNSWJourneyOperator?
-                let isOperatorVisible: Bool?
-                let realtimeTripId, category: String?
-                let isBus, isHistoricalOccupancy: Bool?
-                let _occupancy: TFNSWJourneyOccupancy?
+            public struct TFNSWJourneyTransportation: Codable  {
+                public let id: String?
+                public let mode: Int
+                public let name: String
+                public let productID: Int?
+                public let routeNumber, serviceDirection: String?
+                public let type: String?
+                public let colour: TFNSWJourneyColour?
+                public let networkID: Int?
+                public let destination: TransportationDestination?
+                public let occupancy: String?
+                public let transportationOperator: TFNSWJourneyOperator?
+                public let isOperatorVisible: Bool?
+                public let realtimeTripId, category: String?
+                public let isBus, isHistoricalOccupancy: Bool?
+                public let _occupancy: TFNSWJourneyOccupancy?
             }
 
-            struct TFNSWJourneyColour: Codable {
-                let background, foreground, text: String?
+            public struct TFNSWJourneyColour: Codable {
+                public let background, foreground, text: String?
             }
 
-            struct TransportationDestination: Codable {
-                let name, type: String?
+            public struct TransportationDestination: Codable {
+                public let name, type: String?
             }
 
-            struct TFNSWJourneyOccupancy: Codable  {
-                let queryID, percent: String?
-                let settings: TFNSWJourneySettings?
-                let calculatedLevel: String?
+            public struct TFNSWJourneyOccupancy: Codable  {
+                public let queryID, percent: String?
+                public let settings: TFNSWJourneySettings?
+                public let calculatedLevel: String?
             }
 
-            struct TFNSWJourneySettings: Codable  {
-                let low, medium, full: Int?
-                let settingsDescription: String?
+            public struct TFNSWJourneySettings: Codable  {
+                public let low, medium, full: Int?
+                public let settingsDescription: String?
             }
 
-            struct TFNSWJourneyOperator: Codable  {
-                let id, name: String?
+            public struct TFNSWJourneyOperator: Codable  {
+                public let id, name: String?
             }
         }
     }

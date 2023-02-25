@@ -7,20 +7,20 @@
 
 import Foundation
 
-struct Journey: Codable {
-    let departureName: String
-    let departureDetail: String
-    let departureTime: Int
-    let departureDate: Date
-    let arrivalName: String
-    let arrivalDetail: String
-    let arrivalTime: Int
-    let duration: Int
-    let realtimeMessage: String
-    let delayed: Bool
-    var legs: [JourneyLeg]
+public struct Journey: Codable {
+    public let departureName: String
+    public let departureDetail: String
+    public let departureTime: Int
+    public let departureDate: Date
+    public let arrivalName: String
+    public let arrivalDetail: String
+    public let arrivalTime: Int
+    public let duration: Int
+    public let realtimeMessage: String
+    public let delayed: Bool
+    public var legs: [JourneyLeg]
     
-    init?(tfnswJourney: Journey.Responses.TFNSW.TFNSWJourney) {
+    public init?(tfnswJourney: Journey.Responses.TFNSW.TFNSWJourney) {
         let publicTransportLegs = tfnswJourney.legs
         /// Regardless of the mode, departure time is assessed against the
         /// first leg of the journey to ensure only future journeys (departing
@@ -256,22 +256,22 @@ struct Journey: Codable {
     }
 }
 
-struct JourneyLeg: Codable {
-    let coordinates: [[Double]]
-    let mode: String
-    let tripID: String
-    let departureName: String
-    let departureDetail: String
-    let departureTime: Int
-    let departureStopID: Int
-    let duration: Int
-    var delayed: Bool
-    var delay: Int
+public struct JourneyLeg: Codable {
+    public let coordinates: [[Double]]
+    public let mode: String
+    public let tripID: String
+    public let departureName: String
+    public let departureDetail: String
+    public let departureTime: Int
+    public let departureStopID: Int
+    public let duration: Int
+    public var delayed: Bool
+    public var delay: Int
     /// Used to provide data for `TripView.swift` in the
     /// case that the realtimeTripID provided by TFNSW
     /// is out of date or doesn't match any saved to the
     /// Vapor server db.
-    let stopEvents: [Leg]
+    public let stopEvents: [Leg]
 }
 
 /// Each `Leg` of a `Trip` corresponds to a StopTime event from GTFS.
@@ -287,17 +287,17 @@ struct JourneyLeg: Codable {
 ///
 /// - Remark: Required to be a class vice struct to support conformance
 /// to ObservableObject
-class Leg: Codable {
-    let stopID: Int
-    let stopName: String
-    let stopDetail: String
-    let departureTime: Int?
-    let arrivalTime: Int?
-    let stopSequence: Int
-    var delayed: Bool
-    var delay: Int
+public class Leg: Codable {
+    public let stopID: Int
+    public let stopName: String
+    public let stopDetail: String
+    public let departureTime: Int?
+    public let arrivalTime: Int?
+    public let stopSequence: Int
+    public var delayed: Bool
+    public var delay: Int
 
-    init(
+    public init(
         stopID: Int,
         stopName: String,
         stopDetail: String,
