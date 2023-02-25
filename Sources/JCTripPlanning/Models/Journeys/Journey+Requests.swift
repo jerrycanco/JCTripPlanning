@@ -20,6 +20,17 @@ extension Journey {
             public let date: Date?
             public let accessible: Bool
             public let includeSchoolBuses: Bool
+            
+            public init(origin: String? = nil, fromLat: Double? = nil, fromLng: Double? = nil, destination: String, metric: DepartureMetric, date: Date? = nil, accessible: Bool, includeSchoolBuses: Bool) {
+                self.origin = origin
+                self.fromLat = fromLat
+                self.fromLng = fromLng
+                self.destination = destination
+                self.metric = metric
+                self.date = date
+                self.accessible = accessible
+                self.includeSchoolBuses = includeSchoolBuses
+            }
         }
         
         public struct TFNSW: Codable {

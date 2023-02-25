@@ -16,6 +16,11 @@ extension Departure {
         public struct Client: Codable {
             public let stopID: Int
             public let modeOfTravel: ModeOfTravel?
+            
+            public init(stopID: Int, modeOfTravel: ModeOfTravel? = nil) {
+                self.stopID = stopID
+                self.modeOfTravel = modeOfTravel
+            }
         }
         
         // MARK: Query Items for TFNSW
