@@ -33,9 +33,9 @@ extension Journey {
             }
         }
         
-        public struct TFNSW: Codable {
+        public struct TFNSW {
             
-            public struct Website {
+            public struct Website: Codable {
                 public let from: String?
                 public let fromLat: Double
                 public let fromLng: Double
