@@ -49,7 +49,7 @@ extension Journey {
                 public let preferences: Preferences
                 public let dateTime: String?
                 
-                public init(originStopID: String, destinationStopID: String, metric: DepartureMetric = .immediately, date: Date?, accessible: Bool) {
+                public init(originStopID: String, destinationStopID: String, metric: DepartureMetric = .immediately, date: Date?, accessible: Bool, includeSchoolBuses: Bool) {
                     self.from = originStopID
                     self.to = destinationStopID
                     self.fromLat = 0
@@ -61,7 +61,7 @@ extension Journey {
                     case .departingAfter: self.leaving = true
                     case .arrivingBefore: self.leaving = false
                     }
-                    self.excludedModes = [11]
+                    self.excludedModes = includeSchoolBuses ? [] : [11]
                     self.source = "transportnsw-info"
                     self.filters = Filters(accessible: accessible)
                     self.preferences = Preferences()
@@ -72,7 +72,7 @@ extension Journey {
                     }
                 }
                 
-                public init(fromLat: Double, fromLng: Double, destinationStopID: String, metric: DepartureMetric = .immediately, date: Date?, accessible: Bool) {
+                public init(fromLat: Double, fromLng: Double, destinationStopID: String, metric: DepartureMetric = .immediately, date: Date?, accessible: Bool, includeSchoolBuses: Bool) {
                     self.from = nil
                     self.to = destinationStopID
                     self.fromLat = fromLat
@@ -84,7 +84,7 @@ extension Journey {
                     case .departingAfter: self.leaving = true
                     case .arrivingBefore: self.leaving = false
                     }
-                    self.excludedModes = [11]
+                    self.excludedModes = includeSchoolBuses ? [] : [11]
                     self.source = "transportnsw-info"
                     self.filters = Filters(accessible: accessible)
                     self.preferences = Preferences()
