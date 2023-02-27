@@ -33,6 +33,23 @@ public struct ResourceConstants {
         }
     }
     
+    public struct PathStrings {
+
+        public struct TFNSW {
+            
+            public enum Website {
+                public static let departures = "/departure-list-request"
+                public static let journeys = "/trip-request"
+            }
+            
+            public enum OpenDataAPI {
+                public static let departures = "/departure_mon"
+                public static let journeys = "/trip"
+                public static let stops = "/stop_finder"
+            }
+        }
+    }
+    
     public struct Headers {
         /// Used for building TFNSW Website requests client-side.
         public static let dictionary: [String: String] = [
