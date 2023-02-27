@@ -12,23 +12,23 @@ public struct ResourceConstants {
     public struct URLStrings {
         
         public struct MetroAPI {
-            static let baseURL = "https://api.tripplannersydney.com/v2"
+            public static let baseURL = "https://api.tripplannersydney.com/v2"
         }
         
         public struct TFNSW {
             
             public enum Website {
-                static let baseURL = "https://transportnsw.info/api/trip/v1"
-                static let departures = "https://transportnsw.info/api/trip/v1/departure-list-request"
-                static let journeys = "https://transportnsw.info/api/trip/v1/trip-request"
-                static let majorAlerts = "https://transportnsw.info/tfnsw-alerts/alert-banners"
+                public static let baseURL = "https://transportnsw.info/api/trip/v1"
+                public static let departures = "https://transportnsw.info/api/trip/v1/departure-list-request"
+                public static let journeys = "https://transportnsw.info/api/trip/v1/trip-request"
+                public static let majorAlerts = "https://transportnsw.info/tfnsw-alerts/alert-banners"
             }
             
             public enum OpenDataAPI {
-                static let baseURL = "https://api.transport.nsw.gov.au/v1/tp"
-                static let departures = "https://api.transport.nsw.gov.au/v1/tp/departure_mon"
-                static let journeys = "https://api.transport.nsw.gov.au/v1/tp/trip"
-                static let stops = "https://api.transport.nsw.gov.au/v1/tp/stop_finder"
+                public static let baseURL = "https://api.transport.nsw.gov.au/v1/tp"
+                public static let departures = "https://api.transport.nsw.gov.au/v1/tp/departure_mon"
+                public static let journeys = "https://api.transport.nsw.gov.au/v1/tp/trip"
+                public static let stops = "https://api.transport.nsw.gov.au/v1/tp/stop_finder"
             }
         }
     }
