@@ -66,7 +66,7 @@ extension Journey {
                     self.filters = Filters(accessible: accessible)
                     self.preferences = Preferences()
                     if let date = date, metric != .immediately {
-                        self.dateTime = date.formatted(.iso8601)
+                        self.dateTime = DateHelper.utcDF.string(from: date) // date.formatted(.iso8601)
                     } else {
                         self.dateTime = nil
                     }
@@ -89,7 +89,7 @@ extension Journey {
                     self.filters = Filters(accessible: accessible)
                     self.preferences = Preferences()
                     if let date = date, metric != .immediately {
-                        self.dateTime = date.formatted(.iso8601)
+                        self.dateTime = DateHelper.utcDF.string(from: date)
                     } else {
                         self.dateTime = nil
                     }
