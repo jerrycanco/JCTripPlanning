@@ -13,7 +13,7 @@ extension Departure {
         
         // MARK: Departures Response from TFNSW
         
-        public struct TFNSW: Decodable {
+        public struct TFNSW: Codable {
             public let version: String?
             public let systemMessages: [DeparturesSystemMessage]?
             public let locations: [DeparturesLocationElement]?
@@ -25,7 +25,7 @@ extension Departure {
             public let module, text, type: String?
         }
 
-        public struct DeparturesLocationElement: Decodable {
+        public struct DeparturesLocationElement: Codable {
             public let id: String?
             public let isGlobalID: Bool?
             public let name, disassembledName: String?
@@ -38,7 +38,7 @@ extension Departure {
             public let properties: DeparturesAssignedStopProperties?
         }
 
-        public struct DeparturesAssignedStop: Decodable {
+        public struct DeparturesAssignedStop: Codable {
             public let id: String?
             public let isGlobalID: Bool?
             public let name, type: String?
@@ -49,19 +49,19 @@ extension Departure {
             public let properties: DeparturesAssignedStopProperties?
         }
 
-        public struct DeparturesAssignedStopParent: Decodable {
+        public struct DeparturesAssignedStopParent: Codable {
             public let name, type: String?
         }
 
-        public struct DeparturesAssignedStopProperties: Decodable {
+        public struct DeparturesAssignedStopProperties: Codable {
             public let stopID: String?
         }
 
-        public struct DeparturesDestinationClass: Decodable {
+        public struct DeparturesDestinationClass: Codable {
             public let id, name, type: String?
         }
 
-        public struct DeparturesStopEvent: Decodable {
+        public struct DeparturesStopEvent: Codable {
             public let isRealtimeControlled: Bool?
             public let location: DeparturesStopEventLocation?
             public let departureTimePlanned, departureTimeEstimated: String?
@@ -70,19 +70,19 @@ extension Departure {
             public let properties: DeparturesStopEventProperties?
         }
 
-        public struct DeparturesInfo: Decodable {
+        public struct DeparturesInfo: Codable {
             public let priority, id, version, urlText: String?
             public let url: String?
             public let content, subtitle: String?
             public let properties: DeparturesInfoProperties?
         }
 
-        public struct DeparturesInfoProperties: Decodable {
+        public struct DeparturesInfoProperties: Codable {
             public let publisher, infoType, appliesTo, stopIDglobalID: String?
             public let smsText, speechText: String?
         }
 
-        public struct DeparturesStopEventLocation: Decodable {
+        public struct DeparturesStopEventLocation: Codable {
             public let id: String?
             public let isGlobalID: Bool?
             public let name, type: String?
@@ -91,7 +91,7 @@ extension Departure {
             public let parent: DeparturesPurpleParent?
         }
 
-        public struct DeparturesPurpleParent: Decodable {
+        public struct DeparturesPurpleParent: Codable {
             public let id: String?
             public let isGlobalID: Bool?
             public let name, disassembledName, type: String?
@@ -99,15 +99,15 @@ extension Departure {
             public let properties: DeparturesAssignedStopProperties?
         }
 
-        public struct DeparturesPurpleProperties: Decodable {
+        public struct DeparturesPurpleProperties: Codable {
             public let stopID, area, platform: String?
         }
 
-        public struct DeparturesStopEventProperties: Decodable {
+        public struct DeparturesStopEventProperties: Codable {
             public let wheelchairAccess, realtimeTripID, avmsTripID, pbyb: String?
         }
 
-        public struct DeparturesTransportation: Decodable {
+        public struct DeparturesTransportation: Codable {
             public let id, name, disassembledName, number: String?
             public let iconID: Int?
             public let transportationDescription: String?
@@ -118,19 +118,19 @@ extension Departure {
             public let origin: DeparturesDestinationClass?
         }
 
-        public struct DeparturesProduct: Decodable {
+        public struct DeparturesProduct: Codable {
             public let productClass: Int?
             public let name: String?
             public let iconID: Int?
         }
 
-        public struct DeparturesTransportationProperties: Decodable {
+        public struct DeparturesTransportationProperties: Codable {
             public let isTTB: Bool?
             public let tripCode: Int?
             public let lineDisplay, frequencyLine: String?
         }
 
-        public struct DeparturesOperator: Decodable {
+        public struct DeparturesOperator: Codable {
             public let id, name: String?
         }
         
