@@ -92,7 +92,7 @@ extension Journey {
                 public let isAccessible: Bool?
                 public let distance: Int?
                 public let pathDescriptions: [PathDescription]?
-                public let standby: Bool?
+                public let standby: Int?
             }
 
             public struct TFNSWJourneyAlert: Codable {
