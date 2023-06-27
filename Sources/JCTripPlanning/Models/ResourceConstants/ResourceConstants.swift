@@ -102,59 +102,19 @@ public struct ResourceConstants {
                 switch stopID {
                 case 1:
                     requestStopID = 200020
-                    let extraQueryItems: [(String, String)] = [
-                        ("excludedMeans", "checkbox"),
-                        ("exclMOT_1", "1"), // Exclude trains
-                        ("exclMOT_4", "1"), // Exclude light rail
-                        ("exclMOT_5", "1"), // Exclude buses
-                        ("exclMOT_7", "1"), // Exclude coaches
-                        ("exclMOT_11", "1") // Exclude school buses
-                    ]
-                    queryItems.append(contentsOf: extraQueryItems)
+                    queryItems.append(("excludedModes", "1,4,5,7,11"))
                 case 2:
                     requestStopID = 2000441
-                    let extraQueryItems: [(String, String)] = [
-                        ("excludedMeans", "checkbox"),
-                        ("exclMOT_1", "1"), // Exclude trains
-                        ("exclMOT_4", "1"), // Exclude light rail
-                        ("exclMOT_5", "1"), // Exclude buses
-                        ("exclMOT_7", "1"), // Exclude coaches
-                        ("exclMOT_11", "1") // Exclude school buses
-                    ]
-                    queryItems.append(contentsOf: extraQueryItems)
+                    queryItems.append(("excludedModes", "1,4,5,7,11"))
                 case 3:
                     requestStopID = 10102027
-                    let extraQueryItems: [(String, String)] = [
-                        ("excludedMeans", "checkbox"),
-                        ("exclMOT_1", "1"), // Exclude trains
-                        ("exclMOT_4", "1"), // Exclude light rail
-                        ("exclMOT_5", "1"), // Exclude buses
-                        ("exclMOT_7", "1"), // Exclude coaches
-                        ("exclMOT_11", "1") // Exclude school buses
-                    ]
-                    queryItems.append(contentsOf: extraQueryItems)
+                    queryItems.append(("excludedModes", "1,4,5,7,11"))
                 case 88888888:
                     requestStopID = 2000447
-                    let extraQueryItems: [(String, String)] = [
-                        ("excludedMeans", "checkbox"),
-                        ("exclMOT_1", "1"), // Exclude trains
-                        ("exclMOT_5", "1"), // Exclude buses
-                        ("exclMOT_7", "1"), // Exclude coaches
-                        ("exclMOT_9", "1"), // Exclude ferries
-                        ("exclMOT_11", "1") // Exclude school buses
-                    ]
-                    queryItems.append(contentsOf: extraQueryItems)
+                    queryItems.append(("excludedModes", "1,5,7,9,11"))
                 case 200020:
                     if case .lightRail = mode {
-                        let extraQueryItems: [(String, String)] = [
-                            ("excludedMeans", "checkbox"),
-                            ("exclMOT_1", "1"), // Exclude trains
-                            ("exclMOT_5", "1"), // Exclude buses
-                            ("exclMOT_7", "1"), // Exclude coaches
-                            ("exclMOT_9", "1"), // Exclude ferries
-                            ("exclMOT_11", "1") // Exclude school buses
-                        ]
-                        queryItems.append(contentsOf: extraQueryItems)
+                        queryItems.append(("excludedModes", "1,5,7,9,11"))
                     }
                 default: break
                 }
