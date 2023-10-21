@@ -218,7 +218,7 @@ public struct ResourceConstants {
       /// the OpenData API.
       ///
       /// Used client-side.
-      public func tripRequestClientQueryItems(for request: Journey.Requests.Client) -> [(String, String)] {
+      public static func tripRequestClientQueryItems(for request: Journey.Requests.Client) -> [(String, String)] {
         var output: [(String, String)] = [
           ("outputFormat", "rapidJSON"),
           ("coordOutputFormat", "EPSG:4326"),
