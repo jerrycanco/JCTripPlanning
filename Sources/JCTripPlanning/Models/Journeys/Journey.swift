@@ -186,7 +186,6 @@ public struct Journey: Codable {
       let departure = publicTransportLegs.first,
       let firstStop = departure.stopSequence?.first,
       let plannedDepartureTimeString = firstStop.departureTimePlanned,
-      let estimatedDepartureTimeString = firstStop.departureTimeEstimated,
       let departureTime = DateHelper.secondsSinceMidnight(from: plannedDepartureTimeString),
       let departureDate = DateHelper.departureDate(from: plannedDepartureTimeString),
       departureTime > ((Date.secondsSinceMidnight ?? 0) + 30)
