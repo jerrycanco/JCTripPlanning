@@ -68,9 +68,12 @@ extension Journey {
 
       // MARK: - Parent
       public struct Parent: Decodable {
-        public let disassembledName, id, name, parent: String?
+        public let disassembledName, id, name: String?
+        public let parent: ParentParent?
         public let type: String?
       }
+
+      public struct ParentParent: Decodable {}
 
       // MARK: - DestinationProperties
       public struct DestinationProperties: Decodable {
