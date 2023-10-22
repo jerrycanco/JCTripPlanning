@@ -127,7 +127,7 @@ extension Journey {
         public let content, id, priority, subtitle: String?
         public let timestamps: Timestamps?
         public let url, urlText: String?
-        public let version: Int?
+        public let version: String?
       }
 
       // MARK: - Timestamps
