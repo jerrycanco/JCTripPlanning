@@ -58,7 +58,7 @@ extension Journey {
       // MARK: - StopSequenceClass
       public struct StopSequenceClass: Decodable {
         public let arrivalTimeEstimated, arrivalTimePlanned: String?
-        public let coord: [Int]?
+        public let coord: [Double]?
         public let departureTimeEstimated, departureTimePlanned, disassembledName, id: String?
         public let name: String?
         public let parent: Parent?
@@ -110,7 +110,7 @@ extension Journey {
 
       // MARK: - Location
       public struct Location: Decodable {
-        public let coord: [Int]?
+        public let coord: [Double]?
         public let id, type: String?
       }
 
@@ -141,14 +141,14 @@ extension Journey {
 
       // MARK: - Interchange
       public struct Interchange: Decodable {
-        public let coords: [[Int]]?
+        public let coords: [[Double]]?
         public let desc: String?
         public let type: Int?
       }
 
       // MARK: - PathDescription
       public struct PathDescription: Decodable {
-        public let coord: [Int]?
+        public let coord: [Double]?
         public let cumDistance, cumDuration, distance, distanceDown: Int?
         public let distanceUp, duration, fromCoordsIndex: Int?
         public let manoeuvre, name: String?
