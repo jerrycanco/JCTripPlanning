@@ -213,8 +213,8 @@ public struct Journey: Codable {
     var departureName = ""
     var departureDetail = ""
     if 
-      let firstPTLeg = publicTransportLegs.first(where: { [1, 2, 4, 5, 7, 9, 11].contains($0.transportation?.product?.productClass) }),
-      let mode = firstPTLeg.transportation?.product?.productClass,
+      let firstPTLeg = publicTransportLegs.first(where: { [1, 2, 4, 5, 7, 9, 11].contains($0.transportation?.product?.class) }),
+      let mode = firstPTLeg.transportation?.product?.class,
       let origin = firstPTLeg.origin
     {
       departureName = Journey.name(for: origin, of: mode)
@@ -238,7 +238,7 @@ public struct Journey: Codable {
     let arrival = publicTransportLegs[publicTransportLegs.count - 1]
     guard 
       let destination = arrival.destination,
-      let mode = arrival.transportation?.product?.productClass,
+      let mode = arrival.transportation?.product?.class,
       let arrivalTimeEstimated = destination.arrivalTimeEstimated
     else { return nil }
     let arrivalName = Journey.name(for: destination, of: mode)
@@ -252,8 +252,8 @@ public struct Journey: Codable {
     /// identify a journey and cache it client-side.
     let legs = publicTransportLegs.compactMap { ptLeg -> JourneyLeg? in
       /// Remove transfers from the result
-      if ptLeg.transportation?.product?.productClass == 99 { return nil }
-      let mode = Journey.mode(from: ptLeg.transportation?.product?.productClass)
+      if ptLeg.transportation?.product?.class == 99 { return nil }
+      let mode = Journey.mode(from: ptLeg.transportation?.product?.class)
       let tripID = ptLeg.transportation?.properties?.realtimeTripId ?? "Walk\(UUID().uuidString)"
       let departureStopID = Int(ptLeg.origin?.id ?? "") ?? 0
       guard
@@ -265,7 +265,7 @@ public struct Journey: Codable {
       var departureName = ""
       var departureDetail = ""
       if
-        let mode = ptLeg.transportation?.product?.productClass,
+        let mode = ptLeg.transportation?.product?.class,
         [1, 2, 4, 5, 7, 9, 11].contains(mode),
         let origin = ptLeg.origin
       {
