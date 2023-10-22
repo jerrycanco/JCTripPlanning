@@ -184,7 +184,7 @@ extension Journey {
 
       // MARK: - Product
       public struct Product: Decodable {
-        public let productClass, iconID: Int?
+        public let `class`, iconID: Int?
         public let name: String?
       }
 
