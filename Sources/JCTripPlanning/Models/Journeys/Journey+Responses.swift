@@ -16,7 +16,7 @@ extension Journey {
       public struct JourneysResponse: Decodable {
         public let error: Error?
         public let journeys: [Journey]?
-        public let systemMessages: SystemMessages?
+        public let systemMessages: [SystemMessages]?
         public let version: String?
       }
 
@@ -205,13 +205,8 @@ extension Journey {
 
       // MARK: - SystemMessages
       public struct SystemMessages: Decodable {
-        public let responseMessages: [ResponseMessage]?
-      }
-
-      // MARK: - ResponseMessage
-      public struct ResponseMessage: Decodable {
         public let code: Int?
-        public let error, module, type: String?
+        public let error, module, type, text, subType: String?
       }
     }
 
