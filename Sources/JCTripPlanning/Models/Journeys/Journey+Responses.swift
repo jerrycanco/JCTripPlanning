@@ -10,7 +10,208 @@ import Foundation
 extension Journey {
     
     public struct Responses {
-        
+
+      public struct OpenData {
+
+        public struct JourneysResponse {
+            public let error: Error?
+            public let journeys: [Journey]?
+            public let systemMessages: SystemMessages?
+            public let version: String?
+        }
+
+        // MARK: - Error
+        public struct Error {
+            public let message: String?
+            public let versions: Versions?
+        }
+
+        // MARK: - Versions
+        public struct Versions {
+            public let controller, interfaceMax, interfaceMin: String?
+        }
+
+        // MARK: - Journey
+        public struct Journey {
+            public let isAdditional: Bool?
+            public let legs: [Leg]?
+            public let rating: Int?
+        }
+
+        // MARK: - Leg
+        public struct Leg {
+            public let coords: [[Double]]?
+            public let destination: StopSequenceClass?
+            public let distance, duration: Int?
+            public let footPathInfo: [FootPathInfo]?
+            public let hints: [Hint]?
+            public let infos: [Info]?
+            public let interchange: Interchange?
+            public let isRealtimeControlled: Bool?
+            public let origin: StopSequenceClass?
+            public let pathDescriptions: [PathDescription]?
+            public let properties: LegProperties?
+            public let stopSequence: [StopSequenceClass]?
+            public let transportation: Transportation?
+        }
+
+        // MARK: - StopSequenceClass
+        public struct StopSequenceClass {
+            public let arrivalTimeEstimated, arrivalTimePlanned: String?
+            public let coord: [Int]?
+            public let departureTimeEstimated, departureTimePlanned, disassembledName, id: String?
+            public let name: String?
+            public let parent: Parent?
+            public let properties: DestinationProperties?
+            public let type: String?
+        }
+
+        // MARK: - Parent
+        public struct Parent {
+            public let disassembledName, id, name, parent: String?
+            public let type: String?
+        }
+
+        // MARK: - DestinationProperties
+        public struct DestinationProperties {
+            public let wheelchairAccess: String?
+            public let downloads: [Download]?
+        }
+
+        // MARK: - Download
+        public struct Download {
+            public let type, url: String?
+        }
+
+        // MARK: - FootPathInfo
+        public struct FootPathInfo {
+            public let duration: Int?
+            public let footPathElem: [FootPathElem]?
+            public let position: String?
+        }
+
+        // MARK: - FootPathElem
+        public struct FootPathElem {
+            public let description: String?
+            public let destination: FootPathElemDestination?
+            public let level: String?
+            public let levelFrom, levelTo: Int?
+            public let origin: FootPathElemDestination?
+            public let type: String?
+        }
+
+        // MARK: - FootPathElemDestination
+        public struct FootPathElemDestination {
+            public let area: Int?
+            public let georef: String?
+            public let location: Location?
+            public let platform: Int?
+        }
+
+        // MARK: - Location
+        public struct Location {
+            public let coord: [Int]?
+            public let id, type: String?
+        }
+
+        // MARK: - Hint
+        public struct Hint {
+            public let infoText: String?
+        }
+
+        // MARK: - Info
+        public struct Info {
+            public let content, id, priority, subtitle: String?
+            public let timestamps: Timestamps?
+            public let url, urlText: String?
+            public let version: Int?
+        }
+
+        // MARK: - Timestamps
+        public struct Timestamps {
+            public let availability: Ity?
+            public let creation, lastModification: String?
+            public let validity: [Ity]?
+        }
+
+        // MARK: - Ity
+        public struct Ity {
+            public let from, to: String?
+        }
+
+        // MARK: - Interchange
+        public struct Interchange {
+            public let coords: [[Int]]?
+            public let desc: String?
+            public let type: Int?
+        }
+
+        // MARK: - PathDescription
+        public struct PathDescription {
+            public let coord: [Int]?
+            public let cumDistance, cumDuration, distance, distanceDown: Int?
+            public let distanceUp, duration, fromCoordsIndex: Int?
+            public let manoeuvre, name: String?
+            public let skyDirection, toCoordsIndex: Int?
+            public let turnDirection: String?
+        }
+
+        // MARK: - LegProperties
+        public struct LegProperties {
+            public let differentFares, planLowFloorVehicle, planWheelChairAccess, lineType: String?
+            public let vehicleAccess: [String]?
+        }
+
+        // MARK: - Transportation
+        public struct Transportation {
+            public let description: String?
+            public let destination: OperatorClass?
+            public let disassembledName: String?
+            public let iconID: Int?
+            public let id, name, number: String?
+            public let transportationOperator: OperatorClass?
+            public let product: Product?
+            public let properties: TransportationProperties?
+        }
+
+        // MARK: - OperatorClass
+        public struct OperatorClass {
+            public let id, name: String?
+        }
+
+        // MARK: - Product
+        public struct Product {
+            public let productClass, iconID: Int?
+            public let name: String?
+        }
+
+        // MARK: - TransportationProperties
+        public struct TransportationProperties {
+            public let isTTB: Bool?
+            public let tripCode: Int?
+          public let timetablePeriod: String?
+          public let lineDisplay: String?
+          public let globalId: String?
+          public let realtimeTripId: String?
+
+          public enum CodingKeys: String, CodingKey {
+              case isTTB, tripCode, timetablePeriod, lineDisplay, globalId
+              case realtimeTripId = "RealtimeTripId"
+          }
+        }
+
+        // MARK: - SystemMessages
+        public struct SystemMessages {
+            public let responseMessages: [ResponseMessage]?
+        }
+
+        // MARK: - ResponseMessage
+        public struct ResponseMessage {
+            public let code: Int?
+            public let error, module, type: String?
+        }
+      }
+
         public struct TFNSW {
             
             public struct Website: Codable {
