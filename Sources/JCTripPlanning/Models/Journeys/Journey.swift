@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import JCLogKit
 
 public struct Journey: Codable {
   public let departureName: String
@@ -18,7 +19,9 @@ public struct Journey: Codable {
   public let duration: Int
   public let realtimeMessage: String
   public let delayed: Bool
-  public var legs: [JourneyLeg]
+  public var legs: [Leg]
+
+  // MARK: TFNSW Website Initialiser
 
   public init?(tfnswJourney: Journey.Responses.TFNSW.TFNSWJourney) {
     let publicTransportLegs = tfnswJourney.legs
@@ -84,7 +87,7 @@ public struct Journey: Codable {
     /// updates. Walking legs are given a UUID addition as a tripID
     /// so that tripIDs can be combined as an identifier to uniquely
     /// identify a journey and cache it client-side.
-    let legs = publicTransportLegs.compactMap { ptLeg -> JourneyLeg? in
+    let legs = publicTransportLegs.compactMap { ptLeg -> Leg? in
       /// Remove transfers from the result
       if ptLeg.transportation.mode == 99 { return nil }
       let mode = Journey.mode(from: ptLeg.transportation.mode)
@@ -119,7 +122,7 @@ public struct Journey: Codable {
       let coordinates: [[Double]] = ptLeg.coordinates ?? []
 
       var stopSequence: Int = 0
-      let stopEvents = ptLeg.stopSequence?.compactMap { stopEvent -> Leg? in
+      let stopEvents = ptLeg.stopSequence?.compactMap { stopEvent -> StopEvent? in
         guard
           let stringID = stopEvent.id,
           let stopID = Int(stringID),
@@ -139,7 +142,7 @@ public struct Journey: Codable {
         } else if let stringArrivalPlanned = stopEvent.arrivalTimePlanned {
           arrivalTime = DateHelper.secondsSinceMidnight(from: stringArrivalPlanned)
         }
-        let leg = Leg(stopID: stopID,
+        let leg = StopEvent(stopID: stopID,
                       stopName: stopName,
                       stopDetail: "",
                       departureTime: departureTime,
@@ -151,7 +154,7 @@ public struct Journey: Codable {
         return leg
       }
 
-      return JourneyLeg(coordinates: coordinates,
+      return Leg(coordinates: coordinates,
                         mode: mode,
                         tripID: tripID,
                         departureName: departureName,
@@ -176,33 +179,41 @@ public struct Journey: Codable {
     self.legs = legs
   }
 
+  // MARK: OpenData API Initialiser
+
   public init?(openDataJourney: Journey.Responses.OpenData.Journey) {
-    guard let publicTransportLegs = openDataJourney.legs else { return nil }
     /// Regardless of the mode, departure time is assessed against the
     /// first leg of the journey to ensure only future journeys (departing
     /// from 30 seconds time) are returned.
     guard
-      !publicTransportLegs.isEmpty,
-      let departure = publicTransportLegs.first,
-      let firstStop = departure.stopSequence?.first,
-      let plannedDepartureTimeString = firstStop.departureTimePlanned,
-      let departureTime = DateHelper.secondsSinceMidnight(from: plannedDepartureTimeString),
-      let departureDate = DateHelper.departureDate(from: plannedDepartureTimeString),
-      departureTime > ((Date.secondsSinceMidnight ?? 0) + 30)
+      let rawLegs = openDataJourney.legs,
+      !rawLegs.isEmpty,
+      let departureLeg = rawLegs.first,
+      let origin = departureLeg.origin,
+      let plannedDepartureTimeString = origin.departureTimePlanned,
+      let plannedDepartureTime = DateHelper.secondsSinceMidnight(from: plannedDepartureTimeString),
+      let plannedDepartureDate = DateHelper.departureDate(from: plannedDepartureTimeString),
+      plannedDepartureTime > ((Date.secondsSinceMidnight ?? 0) + 30)
     else {
+      JCLogKit.add("Invalid or missing departure details.", type: .info, category: .businessLogic)
       return nil
     }
 
+    var departureDate = plannedDepartureDate
+    var departureTime = plannedDepartureTime
     var realtimeMessage = "On time"
     var delayed = false
     if
-      let scheduledDeparture = DateHelper.departureDate(from: plannedDepartureTimeString),
-      departureDate.timeIntervalSince(scheduledDeparture) > 10,
-      let scheduledDepartureTime = DateHelper.secondsSinceMidnight(from: plannedDepartureTimeString)
+      let estimatedDepartureTimeString = origin.departureTimeEstimated,
+      let estimatedDepartureTime = DateHelper.secondsSinceMidnight(from: estimatedDepartureTimeString),
+      let estimatedDepartureDate = DateHelper.departureDate(from: estimatedDepartureTimeString),
+      estimatedDepartureDate.timeIntervalSince(plannedDepartureDate) > 10
     {
       delayed = true
-      let scheduledDepartureTimeString = DateHelper.timetableString(scheduledDepartureTime.formattedTime)
-      let minutesDelay = departureDate.timeIntervalSince(scheduledDeparture)
+      departureTime = estimatedDepartureTime
+      departureDate = estimatedDepartureDate
+      let scheduledDepartureTimeString = DateHelper.timetableString(plannedDepartureTime.formattedTime)
+      let minutesDelay = estimatedDepartureDate.timeIntervalSince(plannedDepartureDate)
       let delayString = Int(minutesDelay).waitTime
       realtimeMessage = "\(scheduledDepartureTimeString) service running \(delayString) late"
     }
@@ -213,7 +224,7 @@ public struct Journey: Codable {
     var departureName = ""
     var departureDetail = ""
     if 
-      let firstPTLeg = publicTransportLegs.first(where: { [1, 2, 4, 5, 7, 9, 11].contains($0.transportation?.product?.class) }),
+      let firstPTLeg = rawLegs.first(where: { [1, 2, 4, 5, 7, 9, 11].contains($0.transportation?.product?.class) }),
       let mode = firstPTLeg.transportation?.product?.class,
       let origin = firstPTLeg.origin
     {
@@ -227,7 +238,7 @@ public struct Journey: Codable {
       }
     } else {
       departureName = "Walk"
-      if let distance = departure.distance {
+      if let distance = departureLeg.distance {
         departureDetail = "\(distance) metres"
       } else {
         departureDetail = "See map for details"
@@ -235,43 +246,46 @@ public struct Journey: Codable {
     }
 
     /// Journey Arrival details
-    let arrival = publicTransportLegs[publicTransportLegs.count - 1]
-    guard 
-      let destination = arrival.destination,
-      let mode = arrival.transportation?.product?.class,
+    let arrivalLeg = rawLegs[rawLegs.count - 1]
+    guard
+      let destination = arrivalLeg.destination,
+      let mode = arrivalLeg.transportation?.product?.class,
       let arrivalTimeEstimated = destination.arrivalTimeEstimated
-    else { return nil }
+    else {
+      JCLogKit.add("Invalid or missing departure details.", type: .info, category: .businessLogic)
+      return nil
+    }
     let arrivalName = Journey.name(for: destination, of: mode)
     let arrivalDetail = Journey.detail(for: destination, of: mode)
     guard let arrivalTime = DateHelper.secondsSinceMidnight(from: arrivalTimeEstimated) else { return nil }
-    let duration = publicTransportLegs.reduce(0, { $0 + ($1.duration ?? 0) })
+    let duration = rawLegs.reduce(0, { $0 + ($1.duration ?? 0) })
 
     /// Parse legs into separate trips in order to provide realtime
     /// updates. Walking legs are given a UUID addition as a tripID
     /// so that tripIDs can be combined as an identifier to uniquely
     /// identify a journey and cache it client-side.
-    let legs = publicTransportLegs.compactMap { ptLeg -> JourneyLeg? in
+    let legs = rawLegs.compactMap { rawLeg -> Leg? in
       /// Remove transfers from the result
-      if ptLeg.transportation?.product?.class == 99 { return nil }
-      let mode = Journey.mode(from: ptLeg.transportation?.product?.class)
-      let tripID = ptLeg.transportation?.properties?.realtimeTripId ?? "Walk\(UUID().uuidString)"
-      let departureStopID = Int(ptLeg.origin?.id ?? "") ?? 0
+      if rawLeg.transportation?.product?.class == 99 { return nil }
+      let mode = Journey.mode(from: rawLeg.transportation?.product?.class)
+      let tripID = rawLeg.transportation?.properties?.realtimeTripId ?? "Walk\(UUID().uuidString)"
+      let departureStopID = Int(rawLeg.origin?.id ?? "") ?? 0
       guard
-        let departureTimeString = ptLeg.origin?.departureTimeEstimated ?? ptLeg.origin?.departureTimePlanned,
+        let departureTimeString = rawLeg.origin?.departureTimeEstimated ?? rawLeg.origin?.departureTimePlanned,
         let departureTime = DateHelper.secondsSinceMidnight(from: departureTimeString),
-        let arrivalTimeString = ptLeg.destination?.arrivalTimeEstimated ?? ptLeg.destination?.arrivalTimePlanned,
+        let arrivalTimeString = rawLeg.destination?.arrivalTimeEstimated ?? rawLeg.destination?.arrivalTimePlanned,
         let arrivalTime = DateHelper.secondsSinceMidnight(from: arrivalTimeString)
       else { return nil }
       var departureName = ""
       var departureDetail = ""
       if
-        let mode = ptLeg.transportation?.product?.class,
+        let mode = rawLeg.transportation?.product?.class,
         [1, 2, 4, 5, 7, 9, 11].contains(mode),
-        let origin = ptLeg.origin
+        let origin = rawLeg.origin
       {
         departureName = Journey.name(for: origin, of: mode)
         if mode == 5 || mode == 7 || mode == 11 {
-          if let routeNumber = ptLeg.transportation?.number {
+          if let routeNumber = rawLeg.transportation?.number {
             departureDetail = "Route \(routeNumber)"
           }
         } else {
@@ -279,7 +293,7 @@ public struct Journey: Codable {
         }
       } else {
         departureName = "Walk"
-        if let distance = ptLeg.distance {
+        if let distance = rawLeg.distance {
           departureDetail = "\(distance) metres"
         } else {
           departureDetail = "See map for details"
@@ -287,42 +301,16 @@ public struct Journey: Codable {
       }
 
       let duration = arrivalTime - departureTime
-      let coordinates: [[Double]] = ptLeg.coords ?? []
+      let coordinates: [[Double]] = rawLeg.coords ?? []
 
       var stopSequence: Int = 0
-      let stopEvents = ptLeg.stopSequence?.compactMap { stopEvent -> Leg? in
-        guard
-          let stringID = stopEvent.id,
-          let stopID = Int(stringID),
-          let stopName = stopEvent.disassembledName
-        else {
-          return nil
-        }
-        var departureTime: Int? = nil
-        var arrivalTime: Int? = nil
-        if let stringDeparture = stopEvent.departureTimeEstimated {
-          departureTime = DateHelper.secondsSinceMidnight(from: stringDeparture)
-        } else if let stringDeparturePlanned = stopEvent.departureTimePlanned {
-          departureTime = DateHelper.secondsSinceMidnight(from: stringDeparturePlanned)
-        }
-        if let stringArrival = stopEvent.arrivalTimeEstimated {
-          arrivalTime = DateHelper.secondsSinceMidnight(from: stringArrival)
-        } else if let stringArrivalPlanned = stopEvent.arrivalTimePlanned {
-          arrivalTime = DateHelper.secondsSinceMidnight(from: stringArrivalPlanned)
-        }
-        let leg = Leg(stopID: stopID,
-                      stopName: stopName,
-                      stopDetail: "",
-                      departureTime: departureTime,
-                      arrivalTime: arrivalTime,
-                      stopSequence: stopSequence,
-                      delayed: false,
-                      delay: 0)
+      let stopEvents = rawLeg.stopSequence?.compactMap { stopEvent -> StopEvent? in
+        guard let event = StopEvent(openDataStopEvent: stopEvent, stopSequence: stopSequence) else { return nil }
         stopSequence += 1
-        return leg
+        return event
       }
 
-      return JourneyLeg(coordinates: coordinates,
+      return Leg(coordinates: coordinates,
                         mode: mode,
                         tripID: tripID,
                         departureName: departureName,
@@ -346,6 +334,8 @@ public struct Journey: Codable {
     self.delayed = delayed
     self.legs = legs
   }
+
+  // MARK: Helper Methods
 
   private static func mode(from tfnswMode: Int?) -> String {
     switch tfnswMode {
@@ -392,7 +382,7 @@ public struct Journey: Codable {
     }
   }
 
-  private static func name(for stopEvent: Journey.Responses.OpenData.StopSequenceClass, of tfnswMode: Int? = nil) -> String {
+  private static func name(for stopEvent: Journey.Responses.OpenData.StopEvent, of tfnswMode: Int? = nil) -> String {
     guard let input = stopEvent.disassembledName ?? stopEvent.name else { return "" }
     switch tfnswMode {
       // Train and Metro
@@ -457,7 +447,7 @@ public struct Journey: Codable {
     }
   }
 
-  private static func detail(for stopEvent: Journey.Responses.OpenData.StopSequenceClass, of tfnswMode: Int? = nil) -> String {
+  private static func detail(for stopEvent: Journey.Responses.OpenData.StopEvent, of tfnswMode: Int? = nil) -> String {
     switch tfnswMode {
       // Train and Metro
       // "Flemington Station, Platform 4"
@@ -508,48 +498,4 @@ public struct JourneyLeg: Codable {
   /// is out of date or doesn't match any saved to the
   /// Vapor server db.
   public let stopEvents: [Leg]
-}
-
-/// Each `Leg` of a `Trip` corresponds to a StopTime event from GTFS.
-/// The `stopID` parameter will be used to reference realtime updates.
-/// Note that Trip Updates (delays etc) use the stopID of a specfic
-/// platform etc rather than the parent station stopID.
-///
-/// - Note: `departureTime` or `arrivalTime` will be nil in turn for
-/// first and final stop of a trip, correspondng to pickup_type and
-/// drop_off_type in the schema. No Leg object is created if both are
-/// nil for a given StopTime object as it means the vehicle doesn't
-/// stop here.
-///
-/// - Remark: Required to be a class vice struct to support conformance
-/// to ObservableObject
-public class Leg: Codable {
-  public let stopID: Int
-  public let stopName: String
-  public let stopDetail: String
-  public let departureTime: Int?
-  public let arrivalTime: Int?
-  public let stopSequence: Int
-  public var delayed: Bool
-  public var delay: Int
-
-  public init(
-    stopID: Int,
-    stopName: String,
-    stopDetail: String,
-    departureTime: Int?,
-    arrivalTime: Int?,
-    stopSequence: Int,
-    delayed: Bool,
-    delay: Int
-  ) {
-    self.stopID = stopID
-    self.stopName = stopName
-    self.stopDetail = stopDetail
-    self.departureTime = departureTime
-    self.arrivalTime = arrivalTime
-    self.stopSequence = stopSequence
-    self.delayed = delayed
-    self.delay = delay
-  }
 }

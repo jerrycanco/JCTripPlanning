@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "jclogkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jerrycanco/JCLogKit.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "21892a3bb28b0766934a49f289cacc0a3bf7e22c"
+      }
+    }
+  ],
+  "version" : 2
+}

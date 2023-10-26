@@ -41,22 +41,22 @@ extension Journey {
       // MARK: - Leg
       public struct Leg: Decodable {
         public let coords: [[Double]]?
-        public let destination: StopSequenceClass?
+        public let destination: StopEvent?
         public let distance, duration: Int?
         public let footPathInfo: [FootPathInfo]?
         public let hints: [Hint]?
         public let infos: [Info]?
         public let interchange: Interchange?
         public let isRealtimeControlled: Bool?
-        public let origin: StopSequenceClass?
+        public let origin: StopEvent?
         public let pathDescriptions: [PathDescription]?
         public let properties: LegProperties?
-        public let stopSequence: [StopSequenceClass]?
+        public let stopSequence: [StopEvent]?
         public let transportation: Transportation?
       }
 
       // MARK: - StopSequenceClass
-      public struct StopSequenceClass: Decodable {
+      public struct StopEvent: Decodable {
         public let arrivalTimeEstimated, arrivalTimePlanned: String?
         public let coord: [Double]?
         public let departureTimeEstimated, departureTimePlanned, disassembledName, id: String?
