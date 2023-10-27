@@ -263,7 +263,6 @@ public struct Journey: Codable {
     let arrivalName = Journey.name(for: destination, of: mode)
     let arrivalDetail = Journey.detail(for: destination, of: mode)
     guard let arrivalTime = DateHelper.secondsSinceMidnight(from: arrivalTimeEstimated) else { return nil }
-    let duration = rawLegs.reduce(0, { $0 + ($1.duration ?? 0) })
 
     /// Parse legs into separate trips in order to provide realtime
     /// updates. Walking legs are given a UUID addition as a tripID
@@ -278,7 +277,7 @@ public struct Journey: Codable {
     self.arrivalName = arrivalName
     self.arrivalDetail = arrivalDetail
     self.arrivalTime = arrivalTime
-    self.duration = duration
+    self.duration = arrivalTime - departureTime
     self.realtimeMessage = realtimeMessage
     self.delayed = delayed
     self.legs = legs
