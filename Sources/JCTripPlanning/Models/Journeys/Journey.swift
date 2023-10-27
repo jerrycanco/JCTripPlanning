@@ -193,10 +193,14 @@ public struct Journey: Codable {
       let origin = departureLeg.origin,
       let plannedDepartureTimeString = origin.departureTimePlanned,
       let plannedDepartureTime = DateHelper.secondsSinceMidnight(from: plannedDepartureTimeString),
-      let plannedDepartureDate = DateHelper.departureDate(from: plannedDepartureTimeString),
-      plannedDepartureTime > ((Date.secondsSinceMidnight ?? 0) + 30)
+      let plannedDepartureDate = DateHelper.departureDate(from: plannedDepartureTimeString)
     else {
-      JCLogKit.add("Invalid or missing departure details.\nOffending Leg:\n\(openDataJourney.legs!.first!)\norigin:\n\(openDataJourney.legs!.first!.origin)", type: .info, category: .businessLogic)
+      JCLogKit.add("Removed a journey with invalid or missing departure details.", type: .info, category: .businessLogic)
+      return nil
+    }
+
+    guard plannedDepartureTime > ((Date.secondsSinceMidnight ?? 0) + 30) else {
+      JCLogKit.add("Removed a journey that had already departed.", type: .info, category: .businessLogic)
       return nil
     }
 
@@ -251,9 +255,9 @@ public struct Journey: Codable {
     guard
       let destination = arrivalLeg.destination,
       let mode = arrivalLeg.transportation?.product?.class,
-      let arrivalTimeEstimated = destination.arrivalTimeEstimated
+      let arrivalTimeEstimated = destination.arrivalTimeEstimated ?? destination.arrivalTimePlanned
     else {
-      JCLogKit.add("Invalid or missing arrival details.\nOffending Leg:\n\(arrivalLeg)", type: .info, category: .businessLogic)
+      JCLogKit.add("Removed a journey with invalid or missing arrival details.\nOffending Leg:\n\(arrivalLeg)", type: .info, category: .businessLogic)
       return nil
     }
     let arrivalName = Journey.name(for: destination, of: mode)
@@ -265,65 +269,8 @@ public struct Journey: Codable {
     /// updates. Walking legs are given a UUID addition as a tripID
     /// so that tripIDs can be combined as an identifier to uniquely
     /// identify a journey and cache it client-side.
-    let legs = rawLegs.compactMap { rawLeg -> Leg? in
-      /// Remove transfers from the result
-      if rawLeg.transportation?.product?.class == 99 { return nil }
-      let mode = Journey.mode(from: rawLeg.transportation?.product?.class)
-      let tripID = rawLeg.transportation?.properties?.realtimeTripId ?? "Walk\(UUID().uuidString)"
-      let departureStopID = Int(rawLeg.origin?.id ?? "") ?? 0
-      guard
-        let departureTimeString = rawLeg.origin?.departureTimeEstimated ?? rawLeg.origin?.departureTimePlanned,
-        let departureTime = DateHelper.secondsSinceMidnight(from: departureTimeString),
-        let arrivalTimeString = rawLeg.destination?.arrivalTimeEstimated ?? rawLeg.destination?.arrivalTimePlanned,
-        let arrivalTime = DateHelper.secondsSinceMidnight(from: arrivalTimeString)
-      else { return nil }
-      var departureName = ""
-      var departureDetail = ""
-      if
-        let mode = rawLeg.transportation?.product?.class,
-        [1, 2, 4, 5, 7, 9, 11].contains(mode),
-        let origin = rawLeg.origin
-      {
-        departureName = Journey.name(for: origin, of: mode)
-        if mode == 5 || mode == 7 || mode == 11 {
-          if let routeNumber = rawLeg.transportation?.number {
-            departureDetail = "Route \(routeNumber)"
-          }
-        } else {
-          departureDetail = Journey.detail(for: origin, of: mode)
-        }
-      } else {
-        departureName = "Walk"
-        if let distance = rawLeg.distance {
-          departureDetail = "\(distance) metres"
-        } else {
-          departureDetail = "See map for details"
-        }
-      }
+    let legs = rawLegs.compactMap { Leg(openDataLeg: $0) }
 
-      let duration = arrivalTime - departureTime
-      let coordinates: [[Double]] = rawLeg.coords ?? []
-
-      var stopSequence: Int = 0
-      let stopEvents = rawLeg.stopSequence?.compactMap { stopEvent -> StopEvent? in
-        guard let event = StopEvent(openDataStopEvent: stopEvent, stopSequence: stopSequence) else { return nil }
-        stopSequence += 1
-        return event
-      }
-
-      return Leg(coordinates: coordinates,
-                 mode: mode,
-                 tripID: tripID,
-                 departureStopID: departureStopID,
-                 departureName: departureName,
-                 departureDetail: departureDetail,
-                 departureTime: departureTime,
-                 arrivalTime: arrivalTime,
-                 duration: duration,
-                 delayed: false,
-                 delay: 0,
-                 stopEvents: stopEvents ?? [])
-    }
     self.departureName = departureName
     self.departureDetail = departureDetail
     self.departureTime = departureTime
@@ -339,7 +286,7 @@ public struct Journey: Codable {
 
   // MARK: Helper Methods
 
-  private static func mode(from tfnswMode: Int?) -> String {
+  static func mode(from tfnswMode: Int?) -> String {
     switch tfnswMode {
     case 1: return "train"
     case 2: return "metro"
@@ -353,7 +300,7 @@ public struct Journey: Codable {
     }
   }
 
-  private static func name(for stopEvent: Journey.Responses.TFNSW.TFNSWJourneyStopEvent, of tfnswMode: Int? = nil) -> String {
+  static func name(for stopEvent: Journey.Responses.TFNSW.TFNSWJourneyStopEvent, of tfnswMode: Int? = nil) -> String {
     guard let input = stopEvent.disassembledName ?? stopEvent.name else { return "" }
     switch tfnswMode {
       // Train and Metro
@@ -384,7 +331,7 @@ public struct Journey: Codable {
     }
   }
 
-  private static func name(for stopEvent: Journey.Responses.OpenData.StopEvent, of tfnswMode: Int? = nil) -> String {
+  static func name(for stopEvent: Journey.Responses.OpenData.StopEvent, of tfnswMode: Int? = nil) -> String {
     guard let input = stopEvent.disassembledName ?? stopEvent.name else { return "" }
     switch tfnswMode {
       // Train and Metro
@@ -415,7 +362,7 @@ public struct Journey: Codable {
     }
   }
 
-  private static func detail(for stopEvent: Journey.Responses.TFNSW.TFNSWJourneyStopEvent, of tfnswMode: Int? = nil) -> String {
+  static func detail(for stopEvent: Journey.Responses.TFNSW.TFNSWJourneyStopEvent, of tfnswMode: Int? = nil) -> String {
     switch tfnswMode {
       // Train and Metro
       // "Flemington Station, Platform 4"
@@ -449,7 +396,7 @@ public struct Journey: Codable {
     }
   }
 
-  private static func detail(for stopEvent: Journey.Responses.OpenData.StopEvent, of tfnswMode: Int? = nil) -> String {
+  static func detail(for stopEvent: Journey.Responses.OpenData.StopEvent, of tfnswMode: Int? = nil) -> String {
     switch tfnswMode {
       // Train and Metro
       // "Flemington Station, Platform 4"
