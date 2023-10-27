@@ -142,29 +142,30 @@ public struct Journey: Codable {
         } else if let stringArrivalPlanned = stopEvent.arrivalTimePlanned {
           arrivalTime = DateHelper.secondsSinceMidnight(from: stringArrivalPlanned)
         }
-        let leg = StopEvent(stopID: stopID,
-                      stopName: stopName,
-                      stopDetail: "",
-                      departureTime: departureTime,
-                      arrivalTime: arrivalTime,
-                      stopSequence: stopSequence,
-                      delayed: false,
-                      delay: 0)
+        let stopEvent = StopEvent(stopID: stopID,
+                                  stopName: stopName,
+                                  stopDetail: "",
+                                  departureTime: departureTime,
+                                  arrivalTime: arrivalTime,
+                                  stopSequence: stopSequence,
+                                  delayed: false,
+                                  delay: 0)
         stopSequence += 1
-        return leg
+        return stopEvent
       }
 
       return Leg(coordinates: coordinates,
-                        mode: mode,
-                        tripID: tripID,
-                        departureName: departureName,
-                        departureDetail: departureDetail,
-                        departureTime: departureTime,
-                        departureStopID: departureStopID,
-                        duration: duration,
-                        delayed: false,
-                        delay: 0,
-                        stopEvents: stopEvents ?? [])
+                 mode: mode,
+                 tripID: tripID,
+                 departureStopID: departureStopID,
+                 departureName: departureName,
+                 departureDetail: departureDetail,
+                 departureTime: departureTime,
+                 arrivalTime: arrivalTime,
+                 duration: duration,
+                 delayed: false,
+                 delay: 0,
+                 stopEvents: stopEvents ?? [])
     }
     self.departureName = departureName
     self.departureDetail = departureDetail
@@ -223,7 +224,7 @@ public struct Journey: Codable {
     /// a trip that only requires walking, make a common sense default.
     var departureName = ""
     var departureDetail = ""
-    if 
+    if
       let firstPTLeg = rawLegs.first(where: { [1, 2, 4, 5, 7, 9, 11].contains($0.transportation?.product?.class) }),
       let mode = firstPTLeg.transportation?.product?.class,
       let origin = firstPTLeg.origin
@@ -311,16 +312,17 @@ public struct Journey: Codable {
       }
 
       return Leg(coordinates: coordinates,
-                        mode: mode,
-                        tripID: tripID,
-                        departureName: departureName,
-                        departureDetail: departureDetail,
-                        departureTime: departureTime,
-                        departureStopID: departureStopID,
-                        duration: duration,
-                        delayed: false,
-                        delay: 0,
-                        stopEvents: stopEvents ?? [])
+                 mode: mode,
+                 tripID: tripID,
+                 departureStopID: departureStopID,
+                 departureName: departureName,
+                 departureDetail: departureDetail,
+                 departureTime: departureTime,
+                 arrivalTime: arrivalTime,
+                 duration: duration,
+                 delayed: false,
+                 delay: 0,
+                 stopEvents: stopEvents ?? [])
     }
     self.departureName = departureName
     self.departureDetail = departureDetail
@@ -480,22 +482,4 @@ public struct Journey: Codable {
     default: return stopEvent.disassembledName ?? stopEvent.name ?? ""
     }
   }
-}
-
-public struct JourneyLeg: Codable {
-  public let coordinates: [[Double]]
-  public let mode: String
-  public let tripID: String
-  public let departureName: String
-  public let departureDetail: String
-  public let departureTime: Int
-  public let departureStopID: Int
-  public let duration: Int
-  public var delayed: Bool
-  public var delay: Int
-  /// Used to provide data for `TripView.swift` in the
-  /// case that the realtimeTripID provided by TFNSW
-  /// is out of date or doesn't match any saved to the
-  /// Vapor server db.
-  public let stopEvents: [Leg]
 }
