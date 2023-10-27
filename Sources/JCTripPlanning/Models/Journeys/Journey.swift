@@ -196,7 +196,7 @@ public struct Journey: Codable {
       let plannedDepartureDate = DateHelper.departureDate(from: plannedDepartureTimeString),
       plannedDepartureTime > ((Date.secondsSinceMidnight ?? 0) + 30)
     else {
-      JCLogKit.add("Invalid or missing departure details.\nOffending Leg:\n\(String(describing: openDataJourney.legs?.first))", type: .info, category: .businessLogic)
+      JCLogKit.add("Invalid or missing departure details.\nOffending Leg:\n\(openDataJourney.legs!.first!)\norigin:\n\(openDataJourney.legs!.first!.origin)", type: .info, category: .businessLogic)
       return nil
     }
 
