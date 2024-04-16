@@ -162,8 +162,11 @@ extension Journey {
       // MARK: - LegProperties
       public struct LegProperties: Decodable {
         public let differentFares, planLowFloorVehicle, planWheelChairAccess, lineType: String?
-        public let vehicleAccess: [String]?
+        public let vehicleAccess: [VehicleAccess]?
       }
+
+      // MARK: Vehicle Access
+      public struct VehicleAccess: Decodable {}
 
       // MARK: - Transportation
       public struct Transportation: Decodable {
