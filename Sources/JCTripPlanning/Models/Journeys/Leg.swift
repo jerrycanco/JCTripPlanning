@@ -27,7 +27,7 @@ import Foundation
 ///   - delayed: Boolean indicator of whether this leg is delayed
 ///   - delay: The amount of any delay, measured in seconds
 ///   - stopEvents: The individual stop events that make up this leg
-public struct Leg: Codable, Identifiable {
+public struct Leg: Codable, Identifiable, Sendable {
   public var id: Int { departureStopID }
   public let coordinates: [[Double]]
   public let mode: String

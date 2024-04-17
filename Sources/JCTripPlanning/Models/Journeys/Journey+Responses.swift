@@ -11,7 +11,7 @@ extension Journey {
 
   public struct Responses {
 
-    public struct OpenData {
+    public struct OpenData: Sendable {
 
       public struct JourneysResponse: Decodable {
         public let error: Error?
@@ -213,7 +213,7 @@ extension Journey {
       }
     }
 
-    public struct TFNSW {
+    public struct TFNSW: Sendable {
 
       public struct Website: Codable {
         public let journeys: [TFNSWJourney]?

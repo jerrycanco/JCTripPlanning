@@ -13,7 +13,7 @@ extension Departure {
         
         // MARK: Request Object from Client
         
-        public struct Client: Codable {
+        public struct Client: Codable, Sendable {
             public let stopID: Int
             public let modeOfTravel: ModeOfTravel?
             

@@ -12,7 +12,7 @@ import Foundation
 /// If a user was travelling from Meadowbank to Town Hall, this object
 /// might represent the train's stop at North Strathfield as part of the
 /// Meadowbank -> Strathfield `Leg` of the `Journey`.
-public struct StopEvent: Codable {
+public struct StopEvent: Codable, Sendable {
   public let stopID: Int
   public let stopName: String
   public let stopDetail: String

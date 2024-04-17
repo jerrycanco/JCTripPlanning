@@ -8,7 +8,7 @@
 import Foundation
 import JCLogKit
 
-public struct Journey: Codable {
+public struct Journey: Codable, Sendable {
   public let departureName: String
   public let departureDetail: String
   public let departureTime: Int

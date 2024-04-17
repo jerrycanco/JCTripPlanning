@@ -10,22 +10,22 @@ import Foundation
 extension Departure {
     
     public struct Responses {
-        
+
         // MARK: Departures Response from TFNSW
         
-        public struct TFNSW: Codable {
+        public struct TFNSW: Codable, Sendable {
             public let version: String?
             public let systemMessages: [DeparturesSystemMessage]?
             public let locations: [DeparturesLocationElement]?
             public let stopEvents: [DeparturesStopEvent]?
         }
 
-        public struct DeparturesSystemMessage: Codable {
+        public struct DeparturesSystemMessage: Codable, Sendable {
             public let code: Int?
             public let module, text, type: String?
         }
 
-        public struct DeparturesLocationElement: Codable {
+        public struct DeparturesLocationElement: Codable, Sendable {
             public let id: String?
             public let isGlobalID: Bool?
             public let name, disassembledName: String?
@@ -38,7 +38,7 @@ extension Departure {
             public let properties: DeparturesAssignedStopProperties?
         }
 
-        public struct DeparturesAssignedStop: Codable {
+        public struct DeparturesAssignedStop: Codable, Sendable {
             public let id: String?
             public let isGlobalID: Bool?
             public let name, type: String?
@@ -49,19 +49,19 @@ extension Departure {
             public let properties: DeparturesAssignedStopProperties?
         }
 
-        public struct DeparturesAssignedStopParent: Codable {
+        public struct DeparturesAssignedStopParent: Codable, Sendable {
             public let name, type: String?
         }
 
-        public struct DeparturesAssignedStopProperties: Codable {
+        public struct DeparturesAssignedStopProperties: Codable, Sendable {
             public let stopID: String?
         }
 
-        public struct DeparturesDestinationClass: Codable {
+        public struct DeparturesDestinationClass: Codable, Sendable {
             public let id, name, type: String?
         }
 
-        public struct DeparturesStopEvent: Codable {
+        public struct DeparturesStopEvent: Codable, Sendable {
             public let isRealtimeControlled: Bool?
             public let location: DeparturesStopEventLocation?
             public let departureTimePlanned, departureTimeEstimated: String?
@@ -70,19 +70,19 @@ extension Departure {
             public let properties: DeparturesStopEventProperties?
         }
 
-        public struct DeparturesInfo: Codable {
+        public struct DeparturesInfo: Codable, Sendable {
             public let priority, id, version, urlText: String?
             public let url: String?
             public let content, subtitle: String?
             public let properties: DeparturesInfoProperties?
         }
 
-        public struct DeparturesInfoProperties: Codable {
+        public struct DeparturesInfoProperties: Codable, Sendable {
             public let publisher, infoType, appliesTo, stopIDglobalID: String?
             public let smsText, speechText: String?
         }
 
-        public struct DeparturesStopEventLocation: Codable {
+        public struct DeparturesStopEventLocation: Codable, Sendable {
             public let id: String?
             public let isGlobalID: Bool?
             public let name, type: String?
@@ -91,7 +91,7 @@ extension Departure {
             public let parent: DeparturesPurpleParent?
         }
 
-        public struct DeparturesPurpleParent: Codable {
+        public struct DeparturesPurpleParent: Codable, Sendable {
             public let id: String?
             public let isGlobalID: Bool?
             public let name, disassembledName, type: String?
@@ -99,15 +99,15 @@ extension Departure {
             public let properties: DeparturesAssignedStopProperties?
         }
 
-        public struct DeparturesPurpleProperties: Codable {
+        public struct DeparturesPurpleProperties: Codable, Sendable {
             public let stopID, area, platform: String?
         }
 
-        public struct DeparturesStopEventProperties: Codable {
+        public struct DeparturesStopEventProperties: Codable, Sendable {
             public let wheelchairAccess, realtimeTripID, avmsTripID, pbyb: String?
         }
 
-        public struct DeparturesTransportation: Codable {
+        public struct DeparturesTransportation: Codable, Sendable {
             public let id, name, disassembledName, number: String?
             public let iconID: Int?
             public let transportationDescription: String?
@@ -118,25 +118,25 @@ extension Departure {
             public let origin: DeparturesDestinationClass?
         }
 
-        public struct DeparturesProduct: Codable {
+        public struct DeparturesProduct: Codable, Sendable {
             public let productClass: Int?
             public let name: String?
             public let iconID: Int?
         }
 
-        public struct DeparturesTransportationProperties: Codable {
+        public struct DeparturesTransportationProperties: Codable, Sendable {
             public let isTTB: Bool?
             public let tripCode: Int?
             public let lineDisplay, frequencyLine: String?
         }
 
-        public struct DeparturesOperator: Codable {
+        public struct DeparturesOperator: Codable, Sendable {
             public let id, name: String?
         }
         
         // MARK: Departures Response to Client
         
-        public struct Client: Codable {
+        public struct Client: Codable, Sendable {
             
             public let sorted: [Departure]
             

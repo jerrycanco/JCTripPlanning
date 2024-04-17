@@ -11,7 +11,7 @@ extension Journey {
     
     public struct Requests {
         
-        public struct Client: Codable {
+        public struct Client: Codable, Sendable {
             public let origin: String?
             public let fromLat: Double?
             public let fromLng: Double?
@@ -33,7 +33,7 @@ extension Journey {
             }
         }
         
-        public struct TFNSW {
+      public struct TFNSW: Sendable {
             
             public struct Website: Codable {
                 public let from: String?
