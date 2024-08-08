@@ -9,6 +9,33 @@ import Foundation
 
 public struct ResourceConstants {
 
+  public static let newMetroStationStopIDs: [Int] = [
+    20003,
+    200046,
+    2000460,
+    2000461,
+    2000462,
+    2000463,
+    2000464,
+    2000465,
+    2000466,
+    2000467,
+    200060,
+    200066,
+    2017077,
+    2017078,
+    201721,
+    204420,
+    204471,
+    204472,
+    2060114,
+    2060115,
+    206044,
+    206516,
+    2065163,
+    2065164
+  ]
+
   public struct URLStrings {
 
     public struct MetroAPI {
