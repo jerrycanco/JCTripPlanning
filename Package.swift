@@ -16,7 +16,7 @@ let package = Package(
             targets: ["JCTripPlanning"]),
     ],
     dependencies: [
-      .package(url: "https://github.com/jerrycanco/JCLogKit.git", branch: "main"),
+      .package(url: "https://github.com/jerrycanco/JCLogKit.git", exact: "0.1.4"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.

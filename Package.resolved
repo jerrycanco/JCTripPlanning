@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jerrycanco/JCLogKit.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "61d98c52aaf779df1d4f659f4004256cb5d07cdf"
+        "revision" : "8f19623a955d753fab1dae77541146e6121d4fec",
+        "version" : "0.1.4"
       }
     }
   ],
