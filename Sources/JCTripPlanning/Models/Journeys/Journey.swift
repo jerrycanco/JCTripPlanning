@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import JCLogKit
 
 public struct Journey: Codable, Sendable {
   public let departureName: String
@@ -195,12 +194,12 @@ public struct Journey: Codable, Sendable {
       let plannedDepartureTime = DateHelper.secondsSinceMidnight(from: plannedDepartureTimeString),
       let plannedDepartureDate = DateHelper.departureDate(from: plannedDepartureTimeString)
     else {
-      JCLogKit.add("Removed a journey with invalid or missing departure details.", type: .info, category: .businessLogic)
+      print("Removed a journey with invalid or missing departure details.")
       return nil
     }
 
     guard plannedDepartureTime > ((Date.secondsSinceMidnight ?? 0) + 30) else {
-      JCLogKit.add("Removed a journey that had already departed.", type: .info, category: .businessLogic)
+      print("Removed a journey that had already departed.")
       return nil
     }
 
@@ -257,7 +256,7 @@ public struct Journey: Codable, Sendable {
       let mode = arrivalLeg.transportation?.product?.class,
       let arrivalTimeEstimated = destination.arrivalTimeEstimated ?? destination.arrivalTimePlanned
     else {
-      JCLogKit.add("Removed a journey with invalid or missing arrival details.\nOffending Leg:\n\(arrivalLeg)", type: .info, category: .businessLogic)
+      print("Removed a journey with invalid or missing arrival details.\nOffending Leg:\n\(arrivalLeg)")
       return nil
     }
     let arrivalName = Journey.name(for: destination, of: mode)
